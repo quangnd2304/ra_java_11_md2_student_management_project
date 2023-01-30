@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 
 class Student extends Component {
+    handleUpdate = (stUpdate) => {
+        this.props.updateProps(stUpdate, true, "UPDATE")
+    }
     render() {
         let { stInfo, stt } = this.props;
         return (
@@ -21,6 +24,7 @@ class Student extends Component {
                         <button
                             type="button"
                             className="btn btn-warning btn-icon-text"
+                            onClick={() => this.handleUpdate(stInfo)}
                         >
                             Sửa
                         </button>

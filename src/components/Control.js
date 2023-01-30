@@ -22,12 +22,15 @@ class Control extends Component {
         let arrSort = sortData.split('-');
         this.props.handleSort(arrSort[0], arrSort[1]);
     }
+    handleAdd = () => {
+        this.props.addprops(true, "ADD");
+    }
     render() {
         return (
             <div className="card-header">
                 <div className="row">
                     <div className="col-3">
-                        <button type="button" className="btn btn-primary btn-icon-text">
+                        <button type="button" className="btn btn-primary btn-icon-text" onClick={this.handleAdd}>
                             Thêm mới sinh viên
                         </button>
                     </div>

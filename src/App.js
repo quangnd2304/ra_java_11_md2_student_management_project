@@ -16,7 +16,10 @@ class App extends Component {
       ],
       searchData: '',
       sortDir: '',
-      sortBy: ''
+      sortBy: '',
+      isToggle: false,
+      actionName: "",
+      selectedStudent: {}
     }
   }
   // B1: tạo function để nhận dữ liệu truyền từ Control lên App
@@ -32,7 +35,52 @@ class App extends Component {
       sortBy: sortBy
     })
   }
+  handleAddStudent = (toggle, actionName) => {
+    // Nhận dữ liệu khi click button thêm mới sinh viên
+    //--> cập nhật lại state: isToggle, actionName
+    this.setState({
+      isToggle: toggle,
+      actionName: actionName
+    })
+  }
+  handleSubmitAdd = (stNew, toggle) => {
+    // Nhận thông tin đối tượng sinh viên cần thêm mới truyền lên từ Form
+    //--> cập nhật state: students
+    this.setState({
+      students: [...this.state.students, stNew],
+      isToggle: toggle
+    })
+  }
+  handleUpdateStudent = (selectedStudent, toggle, actionName) => {
+    //cập nhật state
+    this.setState({
+      actionName: actionName,
+      isToggle: toggle,
+      selectedStudent: selectedStudent
+    })
+  }
+  handleSubmitUpdate = (stUpdate, toggle) => {
+    // Cập nhật vào state: students,isToggle
+    let students = [];
+    for (let i = 0; i < this.state.students.length; i++) {
+      if (this.state.students[i].studentId == stUpdate.studentId) {
+        students.push(stUpdate);
+      } else {
+        students.push(this.state.students[i]);
+      }
+    }
+    this.setState({
+      isToggle: toggle,
+      students: students
+    })
+  }
   render() {
+    // Ẩn hiển form
+    let elementForm = "";
+    if (this.state.isToggle) {
+      //Hiển thị form
+      elementForm = <Form actionName={this.state.actionName} submitAddProps={this.handleSubmitAdd} selectedStudent={this.state.selectedStudent} submitUpdateProps={this.handleSubmitUpdate}></Form>;
+    }
     // Lọc dữ liệu theo searchData
     let students = [];
     if (this.state.searchData == '') {
@@ -76,15 +124,15 @@ class App extends Component {
             <div className="card">
               {/* START CONTROL */}
               {/* B2. Truyền props map với hàm nhận dữ liệu */}
-              <Control handleSearchProps={this.handleSearch} handleSort={this.handleSort}></Control>
+              <Control handleSearchProps={this.handleSearch} handleSort={this.handleSort} addprops={this.handleAddStudent}></Control>
               {/* END CONTROL */}
               {/* START LIST STUDENT */}
-              <ListStudent students={students}></ListStudent>
+              <ListStudent students={students} updateProps={this.handleUpdateStudent}></ListStudent>
               {/* END LIST STUDENT */}
             </div>
           </div>
           {/* START FORM SINH VIEN */}
-          <Form></Form>
+          {elementForm}
           {/* END FORM SINH VIÊN */}
         </div>
 
